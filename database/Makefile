@@ -1,7 +1,7 @@
 DB=gixsql
 BUILD=$(CURDIR)/build.sql
 SCRIPTS=$(CURDIR)/scripts
-MASTER=$(SCRIPTS)/create.sql
+CREATE=$(SCRIPTS)/create.sql
 INSERT = $(SCRIPTS)/insert.sql
 DROP = $(SCRIPTS)/drop.sql
 
@@ -11,7 +11,7 @@ all: insert
 	psql $(DB) -f $(BUILD)
 
 create:
-	@cat $(MASTER) >> $(BUILD)
+	@cat $(CREATE) >> $(BUILD)
 
 insert: create
 	@cat $(INSERT) >> $(BUILD)
