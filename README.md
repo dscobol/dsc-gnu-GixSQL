@@ -9,24 +9,22 @@ In the future, I hope to post better, more robust examples.
 Running this program requires: (Versions used for this example in ()).
 
 - PostgreSQL (14)
-- GnuCOBOL (3.1.2)
+- GnuCOBOL (3.2.0)
 - GixSQL (1.0.20a)
-
-For more information about creating a VM, installing the requirements and other information, go to the [DSCOBOL Website](https://dscobol.github.io)
 
 Here is the list of program names and descriptions in the code directory:
 
-| Program  | Description                               |
-| :------  | :---------------------------------------- |
-|          |                                           |
-| TSQL001A | Sample program provided by GixSQL. Returns a count of the number of records. Modified to use a .env file.|
-
+| Program  | Description                                                                                               |
+| :------- | :-------------------------------------------------------------------------------------------------------- |
+|          |                                                                                                           |
+| TSQL001A | Sample program provided by GixSQL. Returns a count of the number of records. Modified to use a .env file. |
 
 ## A guide to working with this repository.
 
 I have a certain structure on my computer.
 
 For this application:
+
 ```
 code
 │   ├───bin
@@ -39,6 +37,7 @@ database
 │   ├───scripts
 │   └───Makefile
 ```
+
 Within code:
 
 - bin: the executables
@@ -57,15 +56,16 @@ Within database:
 
 A convention when writing regular COBOL programs is to use the extension ".cbl".
 
-When writing COBOL programs with embedded SQL EXEC statements with GixSQL, a convention is to also use the extension ".cbl".
+When writing COBOL programs with embedded SQL EXEC statements, a convention is to use the extension ".sqb".
 
-In the prep step, prep will convert all the SQL EXEC statements in the .cbl program to a CALL statement and write a new file out with an extension of .cbsql to the tcbl directory.
+In the prep step, prep will convert all the SQL EXEC statements in the .sqb program to a CALL statement and write a new file out with an extension of .cbl to the tcbl directory.
 
-In the compile step, the compiler will look for the "program.cbsql" COBOL program in the tcbl directory.
+In the compile step, the compiler will look for the "program.cbl" COBOL program in the tcbl directory.
 
 Creating this temporary file could be done away with but if there is an error in the compile step, it is helpful to have the "fully expanded" version of the code available to look at to find the problem.
 
 ### Why are they not present?
+
 Only the following directories are pushed to a public repository:
 
 code: cbl, cpy, docs, jcl
@@ -90,8 +90,10 @@ Expanded instructions for the steps follow:
 6. Running the program
 
 ### Create the missing directories
+
 Open Terminal, at the root of the code directory, Run:
-``` bash
+
+```bash
 mkdir bin tcbl
 ```
 
@@ -100,7 +102,8 @@ mkdir bin tcbl
 As the normal userid:
 
 In Terminal, Run:
-``` bash
+
+```bash
 createdb gixsql
 ```
 
@@ -108,9 +111,11 @@ createdb gixsql
 "database 'userid' does not exist".
 
 If this is the case, In Terminal Run:
-``` bash
+
+```bash
 createdb xxxxxx
 ```
+
 replacing xxxxx with your userid.
 
 Then re-run the "createdb gixsql" command above.
@@ -118,52 +123,63 @@ Then re-run the "createdb gixsql" command above.
 **End NOTE**
 
 ### Run the Makefile to create the table and insert data
+
 In Terminal, cd into the database directory
 
 Run:
-``` bash
+
+```bash
 make
 ```
+
 This will create a file "build.sql" containing the Create and Insert DDL code and then pass that into the DB.
 
 Examine the Makefile for more info.
 
 ### Create the .env file
+
 **IMPORTANT NOTE:**
 The .env file will contain the userid and password to the database. **MAKE SURE** to add ".env" to your .gitignore(either global or local) so when you commit changes, the .env file will NOT be included.
 
 Copy docs/Code-env.txt to the code root and rename to .env .
 
-- Edit .env  changing DB1name to the correct connection string , DB1role to your userid and DB1pswd to your password.
+- Edit .env changing DB1name to the correct connection string , DB1role to your userid and DB1pswd to your password.
 
 ## Alter the ROLE to add password
 
 As the "normal" userid, Run:
-``` bash
+
+```bash
 psql
 ```
+
 This will take you into the PostgreSQL database system.
 
 Run the following SQL statement BUT replace "userid" with your userid and "'password'" with your password (note: make sure to surround your password with single quotes as seen here.)
 
-``` sql
+```sql
 ALTER ROLE userid WITH PASSWORD 'password';
 ```
 
 ### Running the program - TSQL0001A
 
 The "job" is divided into 2 scripts:
+
 1. "prep, compile, and link"
 2. "run".
 
 In Terminal, cd into the code/jcl/ directory and Run:
-``` bash
+
+```bash
 ./TSQL0001A-compile.sh
 ```
+
 Watch the output. There should be 0 errors on the prep, press Enter to continue, and the compile should return "SUCCESS: Compile Return code is ZERO.".
 
 If so, in Terminal, Run:
-``` bash
+
+```bash
 ./TSQL0001A-run.sh
 ```
+
 and the results will print on the screen.
