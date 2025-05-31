@@ -70,7 +70,7 @@
               GO TO 100-EXIT
            END-IF.
 
-           DISPLAY 'RES: ' T1.
+           DISPLAY 'Number of Records: ' T1.
 
            EXEC SQL CONNECT RESET END-EXEC.
 

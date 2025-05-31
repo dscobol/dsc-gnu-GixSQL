@@ -13,17 +13,17 @@ COBCOPY="../cpy"
 SQLCOPY="$GIXSQL_HOME/share/gixsql/copy"
 
 # Remove old versions
-rm ../tcbl/$PGM.cbsql
+rm ../tcbl/$PGM.cbl
 rm ../bin/$PGM
 
 # GixSQL Prep and Bind
-gixpp -e -S -I $SQLCOPY -I $COBCOPY -i ../cbl/$PGM.cbl -o ../tcbl/$PGM.cbsql
+gixpp -e -S -I $SQLCOPY -I $COBCOPY -i ../cbl/$PGM.sqb -o ../tcbl/$PGM.cbl
 
 # Pause to check the results
 read -p "Press any key to resume"
 
 # Compile the program
-cobc -x ../tcbl/$PGM.cbsql \
+cobc -x ../tcbl/$PGM.cbl \
   -I $SQLCOPY \
   -I $COBCOPY \
   -L $LOADLIB \
@@ -32,7 +32,7 @@ cobc -x ../tcbl/$PGM.cbsql \
 
 # Check return code
 if [ "$?" -eq 0 ]; then
-    echo "SUCCESS: Compile Return code is ZERO."
+  echo "SUCCESS: Compile Return code is ZERO."
 else
-    echo "FAIL: Compile Return code is NOT ZERO."
+  echo "FAIL: Compile Return code is NOT ZERO."
 fi
